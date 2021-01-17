@@ -1,0 +1,35 @@
+{%extends 'users/nav.html' %}
+{%load static%}
+{%block estyle%}
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{%static 'nask/tasks.css' %}">
+	<script src="https://cdn.ckeditor.com/4.14.1/basic/ckeditor.js"></script>
+{%endblock%}
+{%block econtent%}
+	<p>Responses</p>
+	<p>Team Order</p>
+	{%for Leader in leaders%}
+		<details>
+		<summary>{{Leader}}</summary>
+		{% for t in Leader.team.team.all%}
+			{%for r in t.taskresponse_set.all%}
+				{%if r.task == task%}
+					<textarea name="response" class="response" readonly="true">{{r.response | safe}}</textarea>
+				{%endif%}
+			{%endfor%}
+		{%endfor%}
+		</details>
+	{%endfor%}
+	<p>All Resonses in Group</p>
+	{%for R in responses%}
+		<textarea name="response" class="response" readonly="true">{{R.user}},{{R.response | safe}}</textarea>
+	{%endfor%}
+	<script type="text/javascript">
+		CKEDITOR.replaceAll('response',{
+			width: 'auto',
+			height: 100
+		});
+	</script>
+{%endblock%}

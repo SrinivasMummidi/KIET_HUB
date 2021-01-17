@@ -1,0 +1,29 @@
+*{
+	margin:0px;
+	padding:0px;
+}
+nav.navbar-default{
+	margin:0px;
+}
+.container-fluid{
+	background-color:black;
+}
+a.navbar-brand {
+	 margin:5px;
+	 padding:0px;
+	width:35px;
+	height:20px;
+	
+}
+.carousel-caption{
+	color:#333;
+}
+ h3{
+	padding:35px;
+	margin:15px;
+}
+.well{
+	text-align:center;
+	background-color:black;
+	color:blue;
+}

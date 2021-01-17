@@ -1,0 +1,108 @@
+{%extends 'users/nav.html' %}
+{%load static%}
+{%block estyle%}
+	<link rel="stylesheet" type="text/css" href="{%static 'nask/tasks.css' %}">
+{%endblock%}
+{%block econtent%}
+	<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+			{%if user.is_staff%}
+			<li class="nav-item">
+				<a class="nav-link active" id="pills-All-tab" data-toggle="pill" href="#pills-All" role="tab" aria-controls="pills-All" aria-selected="true">All</a>
+			</li>
+			{%else%}
+			<li class="nav-item">
+				<a class="nav-link active" id="pills-pending-tab" data-toggle="pill" href="#pills-pending" role="tab" aria-controls="pills-pending" aria-selected="true">Pending</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-completed-tab" data-toggle="pill" href="#pills-completed" role="tab" aria-controls="pills-completed" aria-selected="false">Completed</a>
+			</li>
+			<li class="nav-item">
+			{%endif%}
+			{%if user.is_staff or user.userprofile.is_leader%}
+				<a href="{%url 'task-create'%}" id="new-task" class="btn btn-outline-primary">New Task</a>
+			{%endif%}
+		</li>
+	</ul>
+	<div class="tab-content" id="pills-tabContent">
+		{%if user.is_staff%}
+		<div class="tab-pane fade show active" id="pills-All" role="tabpanel" aria-labelledby="pills-All-tab">
+			<div class="issues">
+				  	<div class="row">
+				  	{% for task in tasks %}
+				  		<div class="col-sm-6">
+						  	<a href="{%url 'task-detail' task.id%}">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">{{task.title}}</h5>
+						        <p class="card-text">{{task.headline}}</p>
+						        <small class="text-muted">-- {{task.assigned_by}} - {{task.date_posted |date:"dS-M, Y"}}</small>
+						      </div>
+						    </div>
+						    </a>
+						</div>
+					{%endfor%}
+					</div>
+			</div>
+		</div>
+		{%else%}
+		<div class="tab-pane fade show active" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab">
+			<div class="issues">
+				  	<div class="row">
+				  	{% for task in pending %}
+				  		<div class="col-sm-6">
+						  	<a href="{%url 'task-detail' task.id%}">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">{{task.title}}</h5>
+						        <p class="card-text">{{task.headline}}</p>
+						        <small class="text-muted">-- {{task.assigned_by}} - {{task.date_posted |date:"dS-M, Y"}}</small>
+						      </div>
+						    </div>
+						    </a>
+						</div>
+					{%endfor%}
+					</div>
+			</div>
+		</div>
+		<div class="tab-pane fade" id="pills-completed" role="tabpanel" aria-labelledby="pills-completed-tab">
+			<div class="issues">
+				<div class="row">
+				{% for task in completed %}
+				  		<div class="col-sm-6">
+						  	<a href="{%url 'task-detail' task.id%}">
+						    <div class="card">
+						      <div class="card-body">
+						        <h5 class="card-title">{{task.title}}</h5>
+						        <p class="card-text">{{task.headline}}</p>
+						        <small class="text-muted">-- {{task.assigned_by}} - {{task.date_posted |date:"dS-M, Y"}}</small>
+						      </div>
+						    </div>
+						    </a>
+						</div>
+					{%endfor%}
+				</div>
+			</div>
+		</div>
+	</div>
+	{%endif%}
+	{%if is_paginated %}
+			{%if page_obj.has_previous%}
+			<a class="btn btn-outline-info mb-4 mt-3" href="?page=1">First</a>
+			<a class="btn btn-outline-info mb-4 mt-3" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+			{%endif%}
+			{%for num in page_obj.paginator.page_range %}
+				{%if page_obj.number == num %}
+				<a class="btn btn-info mb-4 mt-3" href="?page={{num}}">{{num}}</a>
+				{%elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'%}
+				<a class="btn btn-outline-info mb-4 mt-3" href="?page={{num}}">{{num}}</a>
+				{%endif%}
+			{%endfor%}
+			{%if page_obj.has_next%}
+				<a class="btn btn-outline-info mb-4 mt-3" href="?page={{page_obj.next_page_number}}">Next</a>
+				<a class="btn btn-outline-info mb-4 mt-3" href="?page={{page_obj.paginator.num_pages}}">Last</a>
+			{%endif%}
+		{%endif%}
+{%endblock%}
+
+
+<!-- task.access.filter(users=user).first().users.all() -->

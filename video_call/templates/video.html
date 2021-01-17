@@ -1,0 +1,130 @@
+{%extends 'users/nav.html' %}
+{%load static%}
+{% load crispy_forms_tags%}
+{%block estyle%}
+    <link rel="stylesheet" type="text/css" href="{% static 'video/video.css'%}">
+    <script src='https://meet.jit.si/external_api.js'></script>
+{%endblock%}
+{%block econtent%}
+        <!-- <form id="form" method="POST">
+            {%csrf_token%}
+            {{form | crispy}}
+            <button id="submit" class="btn btn-info">Start</button>
+        </form> -->
+        
+        <div class="row">
+        <div id="jitsi-container" class="col-md-12 mt-5"></div>
+        </div>
+        <div class="row ml-1">
+            <div class="start_call">
+                <button id="start" type="button" class="btn btn-primary ml-1">Start Call</button>
+            </div>
+        </div>
+        <div class="row ml-1 mt-1">
+            <div class="join_call">
+                <label>Room Name:</label>
+                <input type="text" name="roomName" id="roomName">
+                <button id="join" type="button" class="btn btn-primary">Join Call</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            Notes:
+            <div class="text col-md-12">
+            </div>
+        </dvi>
+        <br>
+
+        <script>
+        var join = document.querySelector('#join');
+        var button = document.querySelector('#start');
+        var container = document.querySelector('#jitsi-container');
+        var api = null;
+        var link = null;
+        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var stringLength = 10;
+        button.addEventListener('click', () => {
+            function pickRandom() {
+            return possible[Math.floor(Math.random() * possible.length)];
+            }
+            var randomString = Array.apply(null, Array(stringLength)).map(pickRandom).join('');
+            var domain = "meet.jit.si";
+            var options = {
+                    "roomName": randomString,
+                    "parentNode": container,
+                    "width": 600,
+                    "height": 500,
+                    "userInfo": {"displayName":"{{user.first_name}}({{user.username}})","email":"{{user.email}}"},
+            };
+            button.style.display = 'None'
+            join.style.display = 'None'
+            document.querySelector('#roomName').value = randomString
+            link = domain.concat('/',options['roomName'])
+            api = new JitsiMeetExternalAPI(domain, options);
+            imurl = document.location.origin.concat('{{user.userprofile.image.url}}') 
+            api.executeCommand('avatarUrl', imurl);
+            window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+            let finalTranscript = '';
+            let recognition = new window.SpeechRecognition();
+
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 10;
+            recognition.continuous = true;
+
+            recognition.onresult = (event) => {
+              let interimTranscript = '';
+              for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+                let transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                  finalTranscript += transcript;
+                } else {
+                  interimTranscript += transcript;
+                }
+              }
+
+              document.querySelector('.text').innerHTML = finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</>';
+            }
+            recognition.start();
+        });
+        join.addEventListener('click', () => {
+            var randomString = document.querySelector('#roomName').value
+            var domain = "meet.jit.si";
+            var options = {
+                    "roomName": randomString,
+                    "parentNode": container,
+                    "width": 600,
+                    "height": 500,
+                    "userInfo": {"displayName":"{{user.first_name}}({{user.username}})","email":"{{user.email}}"},
+            };
+            button.style.display = 'None'
+            join.style.display = 'None'
+            link = domain.concat('/',options['roomName'])
+            api = new JitsiMeetExternalAPI(domain, options);
+            imurl = document.location.origin.concat('{{user.userprofile.image.url}}') 
+            api.executeCommand('avatarUrl', imurl);
+            window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+            let finalTranscript = '';
+            let recognition = new window.SpeechRecognition();
+
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 10;
+            recognition.continuous = true;
+
+            recognition.onresult = (event) => {
+              let interimTranscript = '';
+              for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+                let transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                  finalTranscript += transcript;
+                } else {
+                  interimTranscript += transcript;
+                }
+              }
+
+              document.querySelector('.text').innerHTML = finalTranscript + '<i style="color:#ddd;">' + interimTranscript + '</>';
+            }
+            recognition.start();
+        });
+
+        </script>
+{%endblock%}

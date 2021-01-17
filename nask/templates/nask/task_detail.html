@@ -1,0 +1,43 @@
+{%extends 'users/nav.html' %}
+{%load static%}
+{%block estyle%}
+	<link rel="stylesheet" type="text/css" href="{%static 'nask/tasks.css' %}">
+{%endblock%}
+{%block econtent%}
+	<a href="{%url 'Tasks'%}" style="float: right;"><img src="https://img.icons8.com/color/25/000000/double-left.png"/></a>
+	<article class="media content-section">
+		<div class="media-body">
+			<h2 class="article-title" style="text-align: center;">{{object.title}}</h2>
+			<div class="article-content">
+				{{object.task_info | safe }}
+			</div>
+			<hr>
+			<div class="response">
+			{%if user.is_staff%}
+				
+			{%else%}
+				<form method="POST">
+					{% csrf_token %}
+					{{form.response.label}}:<br>
+					{{form.media}}
+					{{form.response}}
+					{% for error in form.errors%}
+								<small style="color:red;">{{error}}</small>
+							{% endfor %}
+					<br><br>
+					<button class="btn btn-info" id="respond">Respond</button>
+				</form>
+			{%endif%}
+			</div>
+		</div>
+	</article>
+	<div class="float-right">
+		{% if object.assigned_by == user %}
+			<a class="btn btn-secondary mt-4" href="{% url 'task-update' object.id%}">Update</a>
+			<a class="btn btn-danger mt-4" href="{% url 'task-delete' object.id%}">Delete</a>
+		{%endif%}
+	</div>
+	<!-- <script type="text/javascript"> -->
+			<!-- document.getElementById('id_task').value = window.location.pathname.slice(7,8) -->
+	<!-- </script> -->
+{%endblock%}

@@ -1,0 +1,31 @@
+.content {
+	position: relative;
+	padding-top: 2%; 
+	margin:auto;
+	width: 55%;
+	transition: 0.5s;
+	transition-property: margin-left;
+}
+#check:checked ~ .content {
+	
+}
+#new-task {
+	margin-left: 3px;
+	padding: .400rem .75rem;
+}
+
+.issues .row .col-sm-6 {
+	text-align: center;
+	margin-bottom: 7px;
+}
+
+.card small{
+	float: right;
+}
+#id_task {
+	display: none;
+}
+
+.issues .row .col-sm-6 p {
+	color: black !important;
+}

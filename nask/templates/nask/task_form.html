@@ -1,0 +1,15 @@
+{%extends 'users/nav.html' %}
+{% load static %}
+{% load crispy_forms_tags%}
+{%block estyle%}
+	<link rel="stylesheet" type="text/css" href="{% static 'nask/tasks.css'%}">
+{%endblock%}
+{%block econtent%}
+	<a href="{% url 'Tasks'%}" style="float: right;"><img src="https://img.icons8.com/color/25/000000/double-left.png"/></a>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form.media}}
+		{{ form | crispy}}
+		<button id="post" class="btn btn-info">Post</button>
+	</form>
+{%endblock%}

@@ -1,0 +1,16 @@
+.content {
+	position: relative;
+	padding-top: 2%; 
+	margin:auto;
+	width: 75%;
+	transition: 0.5s;
+	transition-property: margin-left;
+}
+
+#event_title{
+	text-align: center;
+}
+
+.event_info {
+	margin-bottom: 100px;
+}

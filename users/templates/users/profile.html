@@ -1,0 +1,61 @@
+{%extends 'users/nav.html' %}
+{% load static %}
+{% load crispy_forms_tags%}
+{%block estyle%}
+	<link rel="stylesheet" type="text/css" href="{% static 'users/profile.css'%}">
+{%endblock%}
+{%block econtent%}
+	<div class="profile_img">
+		<img class="profile_img" src="{{user.userprofile.image.url}}" alt="">
+	</div>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{u_form|crispy}}
+		{{p_form|crispy}}
+		<div class="file-upload">
+			<button class="file-upload__button btn btn-outline-dark" type="button">
+				Choose
+			</button>
+			<span id="file-upload__label"></span>
+		</div>
+		<button id="update" class="btn btn-info">Update</button>
+	</form>
+	<script type="text/javascript">
+		username = document.getElementById('id_username')
+		branch = document.getElementById('id_branch')
+		year = document.getElementById('id_year')
+		college = document.getElementById('id_college')
+		username.readOnly = true
+		if(college.value!=''){
+  			college.disabled=true
+		}
+		if(branch.value!=''){
+  			branch.disabled=true
+		}
+		if(year.value!=0){
+  			year.disabled=true
+		}
+		button = document.getElementById('update')
+		button.onclick = function(){
+			college.disabled = false
+			branch.disabled = false
+			year.disabled = false
+		}
+		Array.prototype.forEach.call(document.querySelectorAll('.file-upload__button'),function(button){
+			hiddenInput = document.getElementById('id_image');
+			label = document.getElementById('file-upload__label');
+			defaultLabel = 'No File selected.';
+			label.textContent = defaultLabel;
+			label.title = defaultLabel;
+			button.addEventListener('click', function(){
+				hiddenInput.click();
+			});
+			hiddenInput.addEventListener('change', function(){
+				filename = Array.prototype.map.call(hiddenInput.files , function(file){
+					return file.name
+				});
+				label.textContent = filename || defaultLabel
+			});
+		});
+	</script>
+{%endblock%}
