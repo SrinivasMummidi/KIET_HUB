@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_v2v6hq+&frl=4ej*ov_91+zig*vanf%uq9cs$&z#x7#ong5u+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = flase
 
 ALLOWED_HOSTS = ['localhost']
 
